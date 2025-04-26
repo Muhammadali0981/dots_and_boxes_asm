@@ -1,7 +1,7 @@
 include irvine32.inc
 
 .data
-    ; Properly defined board using DB — broken down to avoid complex line error
+    ; Properly defined board using DB â€” broken down to avoid complex line error
     board BYTE '.', ' ', '.', ' ', '.', ' ', '.', 0Ah
           BYTE ' ', ' ', ' ', ' ', ' ', ' ', ' ', 0Ah
           BYTE '.', ' ', '.', ' ', '.', ' ', '.', 0Ah
@@ -103,7 +103,7 @@ invalidMove:
     jmp gameLoop
 
 exitGame:
-    ; Game is over — show board and announce winner
+    ; Game is over â€” show board and announce winner
     call DisplayBoard
     call AnnounceWinner
     exit
@@ -207,6 +207,7 @@ displayTurn:
     ret
 ShowPlayerTurn ENDP
 
+
 ; ======================
 ; Read coordinates of the move from player
 ; ======================
@@ -232,6 +233,7 @@ GetMove PROC
     mov secondCol, eax
     ret
 GetMove ENDP
+
 
 ; ======================
 ; Validate if move is adjacent and legal
@@ -279,7 +281,7 @@ skipSwap:
     add eax, 1
     mov esi, eax                ; Offset into board
 
-    ; Draw horizontal line in red or blue
+    ; storing horizontal line
     cmp currentPlayer, 1
     je player1Line
     mov BYTE PTR [board + esi], '-'
@@ -305,11 +307,7 @@ skipSwap2:
     add eax, 8                  ; Offset for vertical lines
     mov esi, eax
 
-    ; Compute index into lineOwnership (esi / 2)
-    mov ecx, esi              ; Copy esi into ecx
-    ;shr ecx, 1                ; Divide ecx by 2 (shift right by 1)
-
-    ; Draw vertical line in red or blue
+    ; storing the vertical line
     cmp currentPlayer, 1
     je player1VLine
     mov BYTE PTR [board + esi], '|'
@@ -343,7 +341,7 @@ CheckBoxCompletion PROC
         cmp edi, 3
         jge nextRow
 
-        ; Calculate the box index (0–8)
+        ; Calculate the box index (0â€“8)
         mov eax, esi
         imul eax, 3          ; Multiply row index by 3
         add eax, edi         ; Add column index
@@ -380,6 +378,8 @@ CheckBoxCompletion PROC
 
         ; All 4 sides exist -> box complete!
         inc ebx              ; Increment the count of completed boxes
+
+        ;checking which player drew the last line to complete a single box
         cmp currentPlayer, 1
         jne boxGivenToPlayer2
         mov BYTE PTR [lineOwnership + edx + ecx + 1], 1         ;top of the box now belongs to player1
