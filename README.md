@@ -1,7 +1,7 @@
 # 🎮 Dots and Boxes - Assembly Edition
 *A classic strategy game built in x86 Assembly with Irvine32*
 
-![Gameplay Demo](demo.mp4)
+[![Google Drive Video](https://img.shields.io/badge/📺_Watch_on_Google_Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1_gIJvexgny9oFP3o6imk7Dh_Uan1IjQ8/view?usp=sharing)
 
 
 ## 🌟 Key Features
