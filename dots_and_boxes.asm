@@ -44,7 +44,7 @@ include irvine32.inc
     player2Score DWORD 0
     totalBoxes DWORD 9          ; 3x3 boxes = 9 total
     boxCompleted BYTE 9 dup(0) ; Initialize all boxes as not completed (0)
-
+    v DWORD 1 ;added by ali
 .code
 
 main PROC
@@ -74,7 +74,8 @@ gameLoop:
     ; Get move input from player
     call GetMove
     call ValidateMove
-    jnc invalidMove             ; If invalid (Carry Flag set), jump
+    cmp v,1
+    jne invalidMove             ; If invalid (v not equal to 1), jump
 
     ; Apply the move
     call DrawLine
@@ -239,25 +240,108 @@ GetMove ENDP
 ; Validate if move is adjacent and legal
 ; ======================
 ValidateMove PROC
+    ; Check if everything is between 0 and 6
+    mov eax, firstRow
+    call checkRange
+    cmp v, 0
+    je notvalid
+
+    mov eax, secondRow
+    call checkRange
+    cmp v, 0
+    je notvalid
+
+    mov eax, firstCol
+    call checkRange
+    cmp v, 0
+    je notvalid
+
+    mov eax, secondCol
+    call checkRange
+    cmp v, 0
+    je notvalid
+
+    ; Check if everthing is even
+    mov eax, firstRow
+    call checkeven
+    cmp v, 0
+    je notvalid
+
+    mov eax, secondRow
+    call checkeven
+    cmp v, 0
+    je notvalid
+
+    mov eax, firstCol
+    call checkeven
+    cmp v, 0
+    je notvalid
+
+    mov eax, secondCol
+    call checkeven
+    cmp v, 0
+    je notvalid
+
     ; Calculate the difference between rows and columns
     mov eax, firstRow
     sub eax, secondRow
     mov ebx, firstCol
     sub ebx, secondCol
 
-    ; Sum of absolute differences must be 1 (i.e., adjacent dot)
+    ; Sum of absolute differences must be 2 (i.e., adjacent dot)
     add eax, ebx
-    cmp eax, 1
+    cmp eax, 2
     je valid
-    cmp eax, -1
+    cmp eax, -2
     je valid
-    stc                     ; Invalid move -> set Carry Flag = 1
+    mov v, 0                     ; change by ali v = 0
     ret
 valid:
-    clc                     ; Valid move -> clear Carry Flag = 0
+    mov v, 1                     ; change by ali v = 1
+    ret
+notvalid:
     ret
 ValidateMove ENDP
 
+; ======================
+; Checks range of value
+; ======================
+checkRange PROC 
+    cmp eax, 6
+    jle good
+    jg bad
+
+good:
+    cmp eax, 0
+    jge cont
+    jl bad
+cont:
+    mov v, 1
+    ret
+
+bad:
+    mov v, 0
+    ret
+
+checkRange ENDP
+
+; ======================
+; Checks even
+; ======================
+checkeven PROC 
+    and eax, 1
+    jz ev
+    jnz od
+
+ev:
+    mov v, 1
+    ret
+
+od:
+    mov v, 0
+    ret
+
+checkeven ENDP
 
 ; ======================
 ; Draw the line for the move
@@ -458,5 +542,6 @@ p2Wins:
     call WriteString
     ret
 AnnounceWinner ENDP
+
 
 END main
