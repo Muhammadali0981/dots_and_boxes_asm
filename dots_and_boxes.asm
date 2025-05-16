@@ -217,20 +217,18 @@ GetMove PROC
     mov edx, OFFSET msgEnterFirst
     call WriteString
     call ReadInt
-    ;imul eax, 2           ;committed this change for getting the correct position of rows
     mov firstRow, eax
     call ReadInt
-    ;imul eax, 2          ;committed this change for getting the correct position of rows
+   
     mov firstCol, eax
 
     ; Second dot input
     mov edx, OFFSET msgEnterSecond
     call WriteString
     call ReadInt
-    ;imul eax, 2          ;committed this change for getting the correct position of rows
+    
     mov secondRow, eax
     call ReadInt
-    ;imul eax, 2          ;committed this change for getting the correct position of rows
     mov secondCol, eax
     ret
 GetMove ENDP
